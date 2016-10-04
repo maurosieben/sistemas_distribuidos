@@ -9,10 +9,14 @@ def print_man():
     print "LT - returns temperature value"
     print "LP - returns pressure value"
     print "LV - returns flow value"
+    print "ETxx - changes temperature max value"
+    print "Etxx - changes temperature min value"
+    print "EPx - changes pressure max value"
+    print "Epx - changes pressure min value"
+    print "EVx - changes flow max value"
+    print "Evx - changes flow min value"
     print "qc - terminates client"
     print "qs - terminates server"
-
-
 
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 sock.bind((UDP_IP, LISTEN_PORT))
