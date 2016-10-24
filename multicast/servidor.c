@@ -1,0 +1,89 @@
+// Servidor multicast 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define MAXBUFSIZE 1000 
+
+int main()
+{
+   int sock, status, socklen;
+   unsigned char buffer[MAXBUFSIZE];
+   struct sockaddr_in saddr;
+   struct ip_mreq imreq;
+   unsigned char A2;
+   int IDS;   
+   memset(&saddr, 0, sizeof(struct sockaddr_in));
+   memset(&imreq, 0, sizeof(struct ip_mreq));
+
+   // Abre socket UDP
+   sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+   if ( sock < 0 )
+   {
+     perror("Error creating socket");
+     exit(0);
+   }
+   
+   saddr.sin_family = PF_INET;
+   saddr.sin_port = htons(38000); // Escuta na porta 38000
+   saddr.sin_addr.s_addr = htonl(INADDR_ANY); // Usa a interface DEFAULT
+   status = bind(sock, (struct sockaddr *)&saddr, sizeof(struct sockaddr_in));
+
+   if ( status < 0 )
+   {
+     perror("Error binding socket to interface");
+     exit(0);
+   }
+   
+   imreq.imr_multiaddr.s_addr = inet_addr("239.255.32.33"); // End. do grupo multicast
+   imreq.imr_interface.s_addr = INADDR_ANY; // Usa a interface DEFAULT
+
+   // Se associa ao grupo multicast
+   status = setsockopt(sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, 
+              (const void *)&imreq, sizeof(struct ip_mreq));
+
+   socklen = sizeof(struct sockaddr_in);
+
+   system("clear");
+   printf("\t##### Multicast server #####\n");
+     
+   while (1){
+   // Recebe
+   status = recvfrom(sock, buffer, MAXBUFSIZE, 0, 
+                     (struct sockaddr *)&saddr, &socklen);
+
+   //buffer[status] = '\0';
+   /*
+    if(buffer[0]=='1' && buffer[1] == '2')
+      {
+	
+	printf("\tThe value was:\n\t%c\n", A2);
+	A2 = buffer[2];
+	printf("\tThe value is now:\n\t%c\n", A2);
+      }
+   */
+
+   if(buffer[0]==10)
+      {
+	
+	
+	IDS = buffer[1];
+	printf("\tThe ID is:\n\t%d\n", IDS);
+      }
+    
+   // Envia
+   strcpy(buffer, "I am the server.");
+    
+   status = sendto(sock, buffer, strlen(buffer), 0,
+                     (struct sockaddr *)&saddr, socklen);
+     
+   }
+}
