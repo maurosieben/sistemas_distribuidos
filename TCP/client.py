@@ -4,22 +4,22 @@ from datetime import datetime
 TCP_IP = '127.0.0.1'
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
-MESSAGE = "R"
+MESSAGE = "B"
 #hour = datetime.now().time()
 
 def check_data(data):
     count = 0; 
     for value in data:
         if value == 'T':
-            print "Temperatura: ", data[count+1]  
+            print "Temperatura: %s oC" %data[count+1]  
         elif value == 'P':
-            print "Pressao: ", data[count+1]
+            print "Pressao: %s bar" %data[count+1] #" bar"
         elif value == 'V':
-            print "Vazao: ", data[count+1]
+            print "Vazao: %s l/min " %data[count+1] #" l/s"
         elif value == 'R':
-            print "Receita: ", data[count+1]
+            print "Receita: ", data[count+1] 
         elif value == 'Q':
-            print "Quantidade: ", data[count+1]
+            print "Quantidade: ", data[count+1] 
         else:
             pass
         count = count+1
@@ -40,3 +40,4 @@ while(1):
         check_data(data)
     time.sleep(2)
 s.close()
+
