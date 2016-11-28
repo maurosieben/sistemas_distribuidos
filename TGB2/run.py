@@ -4,8 +4,8 @@ from PyQt4.QtCore import QThread, QMutex
 from PyQt4 import QtCore, QtGui, uic
 from main import Ui_MainWindow
 #sets up serial comunication
-#ser =  serial.Serial('/dev/ttyACM0')
-#ser.baudrate = 115200
+ser =  serial.Serial('/dev/ttyACM0')
+ser.baudrate = 115200
 
 class MyMainwindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -21,9 +21,49 @@ class MyMainwindow(QtGui.QMainWindow):
         self.ui.startb.clicked.connect(self.update)
         self.ui.tmax_set.valueChanged.connect(lambda:self.set_temp('max'))
         self.ui.tmin_set.valueChanged.connect(lambda:self.set_temp('min'))
+        self.ui.comboBox.currentIndexChanged.connect(self.set_receita)
         self.tmax = self.ui.tmax_set
         self.tmin = self.ui.tmin_set
+        self.box = self.ui.textEdit
 
+
+    def set_receita(self, index):
+
+        if index==1:
+            self.ui.tmin_set.setValue(0)
+            self.ui.tmax_set.setValue(45)
+            ser.write(str(chr(69)))
+            ser.write("#T#45#t#0#S#86#")
+            
+        elif index ==2:
+        
+            self.ui.tmin_set.setValue(15)
+            self.ui.tmax_set.setValue(50)
+            ser.write(str(chr(69)))
+            ser.write("#T#50#t#15#S#70#")
+
+        elif index ==3:
+        
+            self.ui.tmin_set.setValue(30)
+            self.ui.tmax_set.setValue(65)
+            ser.write(str(chr(69)))
+            ser.write("#T#65#t#30#S#30#")
+
+
+        elif index ==4:
+        
+            self.ui.tmin_set.setValue(0)
+            self.ui.tmax_set.setValue(30)
+            ser.write(str(chr(69)))
+            ser.write("#T#30#t#0#S#86#")
+
+        else:
+            self.ui.tmin_set.setValue(0)
+            self.ui.tmax_set.setValue(70)
+            ser.write(str(chr(69)))
+            ser.write("#T#30#t#0#S#86#")
+            
+          
 # checks out temperature values
     def test_temp(self, temp):
         if temp > self.tmax.value():
@@ -70,7 +110,14 @@ class MyMainwindow(QtGui.QMainWindow):
             elif value == 'V':
                 self.flowd.display(int(self.data[count+1])) 
             elif value == 'Q':
-                self.quantd.display(int(self.data[count+1])) 
+                self.quantd.display(int(self.data[count+1]))
+            elif value == 'R':
+                #self.quantd.display(int(self.data[count+1]))
+                self.box.setText("Tempo restante %s" %self.data[count+1])
+
+            elif value == 'F':
+                #self.quantd.display(int(self.data[count+1]))
+                self.box.setText("Processo Finalizado")
             else:
                 pass
             count = count+1
@@ -91,7 +138,8 @@ class Threadser(QThread):
     def run(self):
         while(1):
             sleep(0.1)
-            data  = "#T#31#P#12#V#57#Q#5000#"
+            ser.write(str(chr(76)))
+            data  = ser.readline()
             self.emit(QtCore.SIGNAL("update"),data)
             
         

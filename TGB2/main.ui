@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>EasyBrewing</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="startb">
@@ -403,6 +403,61 @@
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>330</y>
+      <width>62</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Receita</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>360</y>
+      <width>111</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>IPA</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Weiss</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>RED</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Belgiun</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Pilsen</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
